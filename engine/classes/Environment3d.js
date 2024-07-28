@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 import { Object3D } from 'three';
 import {ShapeTypes} from '../utils/Utilities.js';
-import {getRaycastIntersections, object3DSelector, createPrimitive} from '../utils/THREEHelpers.js';
+import {getRaycastIntersections, object3DSelector, createPrimitive, resizeCanvas} from '../utils/THREEHelpers.js';
 import Physics from '../classes/Physics.js';
 import { POVModes } from './POVManager.js';
 import ModelLoader, { LoadStates } from '../classes/ModelLoader';
 export default class Environment3d{
-    constructor(element, { width, height, gravity, pov }){
+    constructor(element, { width, height, gravity, pov, resizable }){
         const _width = width ? width : 1000;
         const _height = height ? height :  700;
         this.element = element;
@@ -25,12 +25,16 @@ export default class Environment3d{
         this.physics = null;
         this.modelLoader = null;
         this.onLoadingComplete = null;
+        this.resizable = resizable;
         // console.log(this.cameraContainer);
         if(gravity){
             this.physics = new Physics({ gravity, clock: new THREE.Clock() });   
             setTimeout(() => {
                 this.physics.update();
             },10);
+        }
+        if(this.resizable){
+            window.addEventListener("resize", () => { resizeCanvas(this); });
         }
         
     }

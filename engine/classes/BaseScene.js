@@ -11,7 +11,7 @@ export default class BaseScene{
         }
     }
     setup (el) {
-        this.environment = new Environment3d(el, {width: this.getWidth(), height: this.getHeight(), gravity: -5, pov: this.getPOVMode()});
+        this.environment = new Environment3d(el, {width: this.getWidth(), height: this.getHeight(), gravity: -5, pov: this.getPOVMode(), resizable: this.canResize()});
         this.environment.onLoadingComplete = async () => {
             await new Promise(resolve => setTimeout(resolve, 50));
             this.loadComplete();
@@ -20,6 +20,9 @@ export default class BaseScene{
         this.initialize();
         this.renderLoop(this);
     }
+    canResize(){
+        return false;
+    }
     initialize(){
         // put custom for scene here
     }
@@ -27,10 +30,10 @@ export default class BaseScene{
         return POVModes.THIRD_PERSON;
     }
     getWidth(){
-        return 1000;
+        return this.canResize() ? window.innerWidth : this.width;
     }
     getHeight(){
-        return 700;
+        return this.canResize() ? window.innerHeight : this.height;
     }
     renderLoop(scope){
         scope.environment.render();

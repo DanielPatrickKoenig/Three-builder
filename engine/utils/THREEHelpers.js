@@ -148,5 +148,20 @@ function getCanvasPosition(obj, environment)
         }
     };
 
+
 };
-export {setRotation, RotationAxis, getRaycastIntersections, object3DSelector, createPrimitive, getCollisions, getDistance, basicImageMaterial, basicColorMaterial, createEmptyContainer, getCanvasPosition}
+
+function resizeCanvas(environment, width, height){
+    console.log(environment);
+    if (environment.camera){
+        const canvasWidth = width ? width : window.innerWidth;
+        const canvasHeight = height ? height : window.innerHeight;
+        console.log('inner width = ', canvasWidth);
+        console.log('inner height = ', canvasHeight);
+        environment.camera.aspect = canvasWidth / canvasHeight;
+        console.log(environment.camera.aspect);
+        environment.camera.updateProjectionMatrix();
+        environment.renderer.setSize(canvasWidth, canvasHeight);   
+    }
+}
+export {setRotation, RotationAxis, getRaycastIntersections, object3DSelector, createPrimitive, getCollisions, getDistance, basicImageMaterial, basicColorMaterial, createEmptyContainer, getCanvasPosition, resizeCanvas}

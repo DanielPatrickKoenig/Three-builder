@@ -19,4 +19,7 @@ export default class TestScene extends ENGINE.BaseScene{
         const walker1 = new Walker1Controller({ environment: this.environment });
         const walker2 = new Walker2Controller({ environment: this.environment });
     }
+    canResize(){
+        return true;
+    }
 }
