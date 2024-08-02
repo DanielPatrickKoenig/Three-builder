@@ -1,6 +1,5 @@
-import {ControllerTypes} from './BaseController';
-import LocatableController from './LocatableController';
-export default class CustomMeshController extends LocatableController{
+import BaseController, {ControllerTypes} from './BaseController';
+export default class CustomMeshController extends BaseController{
     constructor(data, glbFile, startPosition){
         super(data, startPosition);
         this.glbFile = glbFile;

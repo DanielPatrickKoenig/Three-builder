@@ -2,16 +2,13 @@ import * as THREE from 'three';
 import { Object3D } from 'three';
 import {ShapeTypes} from '../utils/Utilities.js';
 import {getRaycastIntersections, object3DSelector, createPrimitive, resizeCanvas} from '../utils/THREEHelpers.js';
-import Physics from '../classes/Physics.js';
-import { POVModes } from './POVManager.js';
 import ModelLoader, { LoadStates } from '../classes/ModelLoader';
 export default class Environment3d{
-    constructor(element, { width, height, gravity, pov, resizable }){
+    constructor(element, { width, height, resizable }){
         const _width = width ? width : 1000;
         const _height = height ? height :  700;
         this.element = element;
         // console.log(pov);
-        this.povMode = pov ? pov : POVModes.SIDE_SCROLL_FLAT;
         this.scene = new THREE.Scene();
         this.cameraContainer = new Object3D();
         this.camera = this.createCamera(_width, _height);
@@ -22,49 +19,17 @@ export default class Environment3d{
         this.renderer.setSize( _width, _height );
         this.controllers = [];
         element.appendChild(this.renderer.domElement);
-        this.physics = null;
         this.modelLoader = null;
         this.onLoadingComplete = null;
         this.resizable = resizable;
         // console.log(this.cameraContainer);
-        if(gravity){
-            this.physics = new Physics({ gravity, clock: new THREE.Clock() });   
-            setTimeout(() => {
-                this.physics.update();
-            },10);
-        }
         if(this.resizable){
             window.addEventListener("resize", () => { resizeCanvas(this); });
         }
         
     }
     createCamera(width, height) {
-        let camera;
-        switch(this.povMode){
-            case POVModes.THIRD_PERSON:
-            case POVModes.FIRST_PERSON:
-            case POVModes.SIDE_SCROLL_PERSPECTIVE:
-            case POVModes.ISOPERSPECTIVE:{
-                camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
-                break;
-            }
-            case POVModes.SIDE_SCROLL_FLAT:{
-                const aspect = width / height;
-                const d = 20;
-                camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
-                // camera.position.set( 20, 20, 20 );
-                break;
-            }
-            case POVModes.ISOMETRIC:{
-                const aspect = width / height;
-                const d = 20;
-                camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 0, 1000 );
-                camera.position.set( 0, 0, 0 );
-                break;
-            }
-        }
-        
-        return camera;
+        return  new THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
     }
     registerController (controller) {
         this.controllers.push({ controller, type: controller.getControllerType(), id: controller.controllerID });
@@ -97,20 +62,16 @@ export default class Environment3d{
         }
         return model;
     }
-    createPlane({size, orientation, position, mass, material, rotation, customMesh}){
-        const physics = mass !== null ? this.physics : null;
-        return createPrimitive({ type: ShapeTypes.PLANE, size, position, orientation, mass, physics, material, rotation, scene: this.scene, customMesh });
+    createPlane({size, orientation, position, material, rotation, customMesh}){
+        return createPrimitive({ type: ShapeTypes.PLANE, size, position, orientation, material, rotation, scene: this.scene, customMesh });
     }
-    createBox({size, orientation, position, mass, material, rotation, customMesh}){
-        const physics = mass !== null ? this.physics : null;
-        return createPrimitive({ type: ShapeTypes.BOX, size, position, orientation, mass, physics, material, rotation, scene: this.scene, customMesh });
+    createBox({size, orientation, position, material, rotation, customMesh}){
+        return createPrimitive({ type: ShapeTypes.BOX, size, position, orientation, material, rotation, scene: this.scene, customMesh });
     }
-    createSphere({size, orientation, position, mass, material, rotation, customMesh}){
-        const physics = mass !== null ? this.physics : null;
-        return createPrimitive({ type: ShapeTypes.SPHERE, size, position, orientation, mass, physics, material, rotation, scene: this.scene, customMesh });
+    createSphere({size, orientation, position, material, rotation, customMesh}){
+        return createPrimitive({ type: ShapeTypes.SPHERE, size, position, orientation, material, rotation, scene: this.scene, customMesh });
     }
-    createCylinder({size, orientation, position, mass, material, rotation, customMesh}){
-        const physics = mass !== null ? this.physics : null;
-        return createPrimitive({ type: ShapeTypes.CYLINDER, size, position, orientation, mass, physics, material, rotation, scene: this.scene, customMesh });
+    createCylinder({size, orientation, position, material, rotation, customMesh}){
+        return createPrimitive({ type: ShapeTypes.CYLINDER, size, position, orientation, material, rotation, scene: this.scene, customMesh });
     }
 }

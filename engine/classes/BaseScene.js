@@ -1,5 +1,4 @@
 import Environment3d from './Environment3d';
-import {POVModes} from './POVManager';
 import gsap from 'gsap';
 import {ControllerTypes} from './controllers/BaseController';
 export default class BaseScene{
@@ -11,7 +10,7 @@ export default class BaseScene{
         }
     }
     setup (el) {
-        this.environment = new Environment3d(el, {width: this.getWidth(), height: this.getHeight(), gravity: -5, pov: this.getPOVMode(), resizable: this.canResize()});
+        this.environment = new Environment3d(el, {width: this.getWidth(), height: this.getHeight(), resizable: this.canResize()});
         this.environment.onLoadingComplete = async () => {
             await new Promise(resolve => setTimeout(resolve, 50));
             this.loadComplete();
@@ -25,9 +24,6 @@ export default class BaseScene{
     }
     initialize(){
         // put custom for scene here
-    }
-    getPOVMode(){
-        return POVModes.THIRD_PERSON;
     }
     getWidth(){
         return this.canResize() ? window.innerWidth : this.width;

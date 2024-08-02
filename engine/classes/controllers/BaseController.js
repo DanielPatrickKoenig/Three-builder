@@ -12,7 +12,6 @@ export default class BaseController{
         this.camera = this.environment.camera;
         this.scene = this.environment.scene;
         this.renderer = this.environment.renderer;
-        this.physics = this.environment.physics;
         this.items = {};
         this.controllerID = `controller-${generateID()}`;
         this.register();

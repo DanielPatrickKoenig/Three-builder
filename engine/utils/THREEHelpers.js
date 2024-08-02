@@ -46,7 +46,7 @@ function object3DSelector(scope, filters) {
         return getDescendantTree(scope).filter(item => Object.keys(filters).filter(_item => item[_item] === filters[_item]).length === Object.keys(filters).length);
     }
 }
-function createPrimitive({ type, size, position, orientation, mass, physics, material, rotation, scene, customMesh }){
+function createPrimitive({ type, size, position, orientation, material, rotation, scene, customMesh }){
     let geometry;
     let mesh;
     const shapeSize = size ? size : defaultDimensionValues().size;
@@ -85,9 +85,6 @@ function createPrimitive({ type, size, position, orientation, mass, physics, mat
     mesh.rotation.z = degreesToRadians(shapeRotation.z);
     scene.add(mesh);
     let body;
-    if(physics){
-        body = physics.addShape({type, mass, size: shapeSize, position: shapePosition, orientation: shapeOrientation, mesh});
-    }
     return {mesh, body};
 }
 

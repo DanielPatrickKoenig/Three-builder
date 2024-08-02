@@ -9,10 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "cannon": "^0.6.2",
     "gsap": "^3.10.4",
-    "jstrig": "^1.0.4",
-    "lodash": "^4.17.21",
     "three": "^0.134.0"
   },
   "devDependencies": {
